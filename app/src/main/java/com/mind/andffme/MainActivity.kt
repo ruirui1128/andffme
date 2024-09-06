@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.sampleText.text = AndFFmeHelper.instance.stringFromJNI()
 
-        testDay7(getFeatureFilePath())
+        testDay7(this,getFeatureFilePath())
 
     }
 

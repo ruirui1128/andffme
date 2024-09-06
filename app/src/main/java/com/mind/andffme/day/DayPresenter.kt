@@ -14,4 +14,6 @@ class DayPresenter {
 
     external fun printVideoInfo(path: String)
 
+    external fun demuxMp4(path: String, h264Path: String, aacPath: String):Int
+
 }

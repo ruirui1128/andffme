@@ -106,3 +106,42 @@ Java_com_mind_andffme_day_DayPresenter_printVideoInfo(JNIEnv *env, jobject thiz,
 
 }
 
+
+extern "C"
+JNIEXPORT jint JNICALL
+Java_com_mind_andffme_day_DayPresenter_demuxMp4(JNIEnv *env, jobject thiz, jstring path,
+                                                jstring h264_path, jstring aac_path) {
+    const char *in_filename = env->GetStringUTFChars(path, JNI_FALSE);
+    const char *h264_filename = env->GetStringUTFChars(h264_path, JNI_FALSE);
+    const char *aac_filename = env->GetStringUTFChars(aac_path, JNI_FALSE);
+
+    // 打印日志
+    LOGD("Processing files: %s, %s, %s", in_filename, h264_filename, aac_filename);
+
+    FILE *aac_fd = fopen(aac_filename, "wb");
+    FILE *h264_fd = fopen(h264_filename, "wb");
+
+    if (!h264_fd || !aac_fd) {
+        LOGD("========= Failed to open  h264 and acc =========");
+        env->ReleaseStringUTFChars(path, in_filename);
+        env->ReleaseStringUTFChars(h264_path, h264_filename);
+        env->ReleaseStringUTFChars(aac_path, aac_filename);
+        return -1;
+    }
+
+    // 初始化FFmpeg
+    AVFormatContext *ifmat_ctx = avformat_alloc_context();
+    if (!ifmat_ctx) {
+        LOGD("========= 初始化FFmpeg 初始化失败 =========");
+        env->ReleaseStringUTFChars(path, in_filename);
+        env->ReleaseStringUTFChars(h264_path, h264_filename);
+        env->ReleaseStringUTFChars(aac_path, aac_filename);
+    }
+
+
+    env->ReleaseStringUTFChars(path, in_filename);
+    env->ReleaseStringUTFChars(h264_path, h264_filename);
+    env->ReleaseStringUTFChars(aac_path, aac_filename);
+    return 0;
+
+}
