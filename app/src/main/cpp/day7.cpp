@@ -1,13 +1,14 @@
 #include <jni.h>
 #include <string>
 #include <malloc.h>
-
+//#include <libavformat/avformat.h>
+//#include <libavutil/avutil.h>
 extern "C" {
-#include "include/libavutil/avutil.h"
+#include "libavutil/avutil.h"
 }
 
 extern "C" {
-#include "include/libavformat//avformat.h"
+#include "libavformat/avformat.h"
 }
 
 
@@ -104,3 +105,4 @@ Java_com_mind_andffme_day_DayPresenter_printVideoInfo(JNIEnv *env, jobject thiz,
     if (in_file_path != nullptr) releaseChars((char *) in_file_path);
 
 }
+
