@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.util.Log
 import com.mind.andffme.databinding.ActivityMainBinding
 import com.mind.andffme.day.testDay7
+import com.mind.andffme.push.launchLive
+import com.mind.andffme.push.launchPush
 import com.permissionx.guolindev.PermissionX
 import java.io.File
 import java.io.FileOutputStream
@@ -22,18 +24,22 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+
     private val permissionList = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         listOf(
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
         )
     } else {
         listOf(
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
         )
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,9 +58,11 @@ class MainActivity : AppCompatActivity() {
     private fun initView() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.sampleText.text = AndFFmeHelper.instance.stringFromJNI()
-
-        testDay7(this,getFeatureFilePath())
+       // binding.sampleText.text = AndFFmeHelper.instance.stringFromJNI()
+        //  testDay7(this,getFeatureFilePath())
+        launchPush(this)
+       // launchLive(this)
+        finish()
 
     }
 

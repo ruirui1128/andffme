@@ -5,20 +5,38 @@ project("andffme")
 add_library( # Sets the name of the library.
         andffme
         SHARED
-
-        # Provides a relative path to your source file(s).
+        RtmpPusher.cpp
+        AudioStream.cpp
+        VideoStream.cpp
         day7.cpp
         native-lib.cpp)
 
 
-
 set(IMPORT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../jniLibs)
 
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/rtmp)
 
 
-# FFmpeg include file
-#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${IMPORT_DIR}/${ANDROID_ABI}/include)
+
+
+#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+add_library(faac
+        STATIC
+        IMPORTED)
+set_target_properties(faac
+        PROPERTIES IMPORTED_LOCATION
+        ${IMPORT_DIR}/${ANDROID_ABI}/libfaac.a)
+
+add_library(x264
+        STATIC
+        IMPORTED)
+set_target_properties(x264
+        PROPERTIES IMPORTED_LOCATION
+        ${IMPORT_DIR}/${ANDROID_ABI}/libx264.a)
+
+
 # Codec library
 add_library(
         avcodec
@@ -91,11 +109,16 @@ set_target_properties(
         ${IMPORT_DIR}/${ANDROID_ABI}/libswscale.so
 )
 
+find_library( log-lib
+        log )
 
 # The main android library, native window, requires this library
 target_link_libraries(
         andffme
         ${log-lib}
+        x264
+        faac
+        rtmp
         android
         avcodec
         avfilter
