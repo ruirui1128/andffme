@@ -2,17 +2,36 @@ cmake_minimum_required(VERSION 3.22.1)
 
 project("andffme")
 
+
+set(IMPORT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../jniLibs)
+
+#utils 工具类
+set(utils ${CMAKE_CURRENT_SOURCE_DIR}/utils)
+#加载 UTIS 头文件
+include_directories(${utils}/)
+
+
+# 自动查找 cpp/player 目录下的所有 .cpp 文件
+file(GLOB PLAYER_SRC
+        "${CMAKE_CURRENT_SOURCE_DIR}/player/*.cpp"
+)
+# 搜索并包含所有头文件的目录
+include_directories(${CMAKE_SOURCE_DIR}/player/include)
+
+
 add_library( # Sets the name of the library.
         andffme
         SHARED
+        ${PLAYER_SRC}
+        Init.cpp
+        Player.cpp
+        PullRtmp.cpp
         RtmpPusher.cpp
         AudioStream.cpp
         VideoStream.cpp
         day7.cpp
         native-lib.cpp)
 
-
-set(IMPORT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../jniLibs)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/rtmp)
 
@@ -109,13 +128,14 @@ set_target_properties(
         ${IMPORT_DIR}/${ANDROID_ABI}/libswscale.so
 )
 
-find_library( log-lib
-        log )
+find_library(log-lib
+        log)
 
 # The main android library, native window, requires this library
 target_link_libraries(
         andffme
         ${log-lib}
+        OpenSLES
         x264
         faac
         rtmp

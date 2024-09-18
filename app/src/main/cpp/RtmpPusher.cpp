@@ -24,11 +24,18 @@ JavaVM *javaVM;
 //callback object
 jobject jobject_error;
 
-//when calling System.loadLibrary, will callback it
-jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
+
+// 提供一个函数用于被 Player.cpp 调用
+bool RtmpPusher_OnLoad(JavaVM* vm) {
     javaVM = vm;
-    return JNI_VERSION_1_6;
+    return true;
 }
+
+//when calling System.loadLibrary, will callback it
+//jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
+//    javaVM = vm;
+//    return JNI_VERSION_1_6;
+//}
 
 //callback error to java
 void throwErrToJava(int error_code) {

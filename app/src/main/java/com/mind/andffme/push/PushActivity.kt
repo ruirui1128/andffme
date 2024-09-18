@@ -37,7 +37,7 @@ fun launchPush(context: Context) {
 class PushActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener,
     LiveStateChangeListener, OnNetworkChangeListener, View.OnClickListener {
     companion object {
-        private const val LIVE_URL = "rtmp://192.168.20.53/live/mystream3"
+        private const val LIVE_URL = "rtmp://192.168.20.53/live/mystream4"
         private const val MSG_ERROR = 100
     }
 

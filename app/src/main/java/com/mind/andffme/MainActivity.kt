@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.util.Log
 import com.mind.andffme.databinding.ActivityMainBinding
 import com.mind.andffme.day.testDay7
+import com.mind.andffme.pull.launchRtmp
+import com.mind.andffme.pull.launchRtmp2
 import com.mind.andffme.push.launchLive
 import com.mind.andffme.push.launchPush
 import com.permissionx.guolindev.PermissionX
@@ -58,11 +60,22 @@ class MainActivity : AppCompatActivity() {
     private fun initView() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-       // binding.sampleText.text = AndFFmeHelper.instance.stringFromJNI()
-        //  testDay7(this,getFeatureFilePath())
-        launchPush(this)
-       // launchLive(this)
-        finish()
+
+        binding.btnRtmpPush.setOnClickListener {
+            launchPush(this)
+            finish()
+        }
+
+        binding.btnRtmpPull.setOnClickListener {
+            launchRtmp(this)
+            finish()
+        }
+
+        binding.btnRtmpPull2.setOnClickListener {
+            launchRtmp2(this)
+            finish()
+        }
+
 
     }
 
