@@ -6,11 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.mind.andffme.databinding.ActivityMainBinding
-import com.mind.andffme.day.testDay7
-import com.mind.andffme.pull.launchRtmp
-import com.mind.andffme.pull.launchRtmp2
-import com.mind.andffme.push.launchLive
-import com.mind.andffme.push.launchPush
+import com.mind.andffme.rtmp.launchRtmpPull
+import com.mind.andffme.rtmp.launchRtmpPush
 import com.permissionx.guolindev.PermissionX
 import java.io.File
 import java.io.FileOutputStream
@@ -62,20 +59,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnRtmpPush.setOnClickListener {
-            launchPush(this)
-            finish()
+            launchRtmpPush(this)
         }
 
         binding.btnRtmpPull.setOnClickListener {
-            launchRtmp(this)
-            finish()
+            launchRtmpPull(this)
         }
-
         binding.btnRtmpPull2.setOnClickListener {
-            launchRtmp2(this)
-            finish()
-        }
 
+        }
 
     }
 
