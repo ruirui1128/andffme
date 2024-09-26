@@ -8,6 +8,7 @@ import android.util.Log
 import com.mind.andffme.databinding.ActivityMainBinding
 import com.mind.andffme.rtmp.launchRtmpPull
 import com.mind.andffme.rtmp.launchRtmpPush
+import com.mind.andffme.rtsp.launchRtspActivity
 import com.permissionx.guolindev.PermissionX
 import java.io.File
 import java.io.FileOutputStream
@@ -65,8 +66,8 @@ class MainActivity : AppCompatActivity() {
         binding.btnRtmpPull.setOnClickListener {
             launchRtmpPull(this)
         }
-        binding.btnRtmpPull2.setOnClickListener {
-
+        binding.btnRtsp.setOnClickListener {
+            launchRtspActivity(this)
         }
 
     }

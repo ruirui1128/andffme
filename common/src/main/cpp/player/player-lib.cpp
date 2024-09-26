@@ -101,10 +101,7 @@ Java_com_dwayne_com_player_PlayerManager_setSurfaceNative(JNIEnv *env, jclass ty
     }
     //创建新的窗口用于视频显示窗口
     nativeWindow = ANativeWindow_fromSurface(env, surface);
-
     pthread_mutex_unlock(&mutex);
-
-
 }
 
 /**

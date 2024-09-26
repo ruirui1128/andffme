@@ -12,6 +12,8 @@
 #define THREAD_MAIN 1   // 此宏代表 主线程的意思
 #define THREAD_CHILD 2  // 此宏代表 子线程的意思
 
+
+
 //打不开媒体数据源
 #define FFMPEG_CAN_NOT_OPEN_URL -1
 //找不到媒体流信息
@@ -27,6 +29,7 @@
 //没有音视频
 #define FFMPEG_NOMEDIA -7
 
+#define FFMPEG_OPEN_STATUE_OK = 100
 //读取媒体数据包失败
 #define FFMPEG_READ_PACKETS_FAIL (ERROR_CODE_FFMPEG_PLAY - 8)
 

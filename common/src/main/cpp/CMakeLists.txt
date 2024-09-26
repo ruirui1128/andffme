@@ -7,6 +7,10 @@ set(FFMPEG ${CMAKE_SOURCE_DIR}/ffmpeg)
 set(RTMP ${CMAKE_SOURCE_DIR}/librtmp)
 #播放器
 set(player ${CMAKE_SOURCE_DIR}/player)
+
+#---rtsp---
+set(rtsp ${CMAKE_SOURCE_DIR}/rtsp)
+
 #推流器
 set(pusher ${CMAKE_SOURCE_DIR}/pusher)
 #视频编码器
@@ -47,6 +51,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -L${faac}/libs/${CMAKE_ANDROID_ARCH_ABI}
 #批量添加自己编写的 cpp 文件,不要把 *.h 加入进来了
 file(GLOB Player_CPP ${player}/*.cpp)
 file(GLOB Push_CPP ${pusher}/*.cpp)
+file(GLOB Rtsp_CPP ${rtsp}/*.cpp)
+
+#添加自己编写 cpp 源文件生成动态库
+add_library(rtsp SHARED ${Rtsp_CPP})
 
 #添加自己编写 cpp 源文件生成动态库
 add_library(player SHARED ${Player_CPP})
@@ -57,6 +65,26 @@ add_library(pusher SHARED ${Push_CPP})
 #找系统中 NDK log库
 find_library(log_lib
         log)
+
+
+
+#播放 so
+target_link_libraries(
+        #播放 so
+        rtsp
+        # 写了此命令不用在乎添加 ffmpeg lib 顺序问题导致应用崩溃
+        -Wl,--start-group
+        avcodec avfilter avformat avutil swresample swscale
+        -Wl,--end-group
+        z
+        #拉流库
+        rtmp
+        #本地库
+        android
+        #音频播放
+        OpenSLES
+        #        utils
+        ${log_lib})
 
 
 #播放 so

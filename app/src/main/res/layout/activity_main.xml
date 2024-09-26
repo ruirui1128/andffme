@@ -32,11 +32,12 @@
             android:layout_marginTop="5dp"
             android:text="RTMP拉流" />
         <Button
-            android:id="@+id/btnRtmpPull2"
+
+            android:id="@+id/btnRtsp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="" />
+            android:text="Rtsp拉流" />
     </LinearLayout>
 
 </ScrollView>

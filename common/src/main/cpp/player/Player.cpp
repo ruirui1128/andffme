@@ -114,7 +114,7 @@ void Player::prepare_() {
         LOGD("第五步 从 stream 流中获取解码这段流的参数信息，区分到底是 音频还是视频");
         AVCodecParameters *codecParameters = stream->codecpar;
         LOGD("第六步 通过流的编解码参数中的编解码 ID ,来获取当前流的解码器");
-        AVCodec *codec = avcodec_find_decoder(codecParameters->codec_id);
+            AVCodec *codec = avcodec_find_decoder(codecParameters->codec_id);
         if (!codec) {
             pCallback->onErrorAction(THREAD_CHILD, FFMPEG_FIND_DECODER_FAIL);
             return;
