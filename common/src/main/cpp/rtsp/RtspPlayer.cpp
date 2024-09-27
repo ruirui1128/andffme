@@ -36,8 +36,15 @@ void *videoPlayThread(void *pVoid) {
 
 // 音频解码线程
 void *audioDecoderThread(void *pVoid) {
-    // RtspPlayer *player = static_cast<RtspPlayer *>(pVoid);
-    //player->start_audio();
+    RtspPlayer *player = static_cast<RtspPlayer *>(pVoid);
+    player->start_decoder_audio();
+    return 0;
+}
+
+// 音频播放
+void *audioPlayThread(void *pVoid) {
+    RtspPlayer *player = static_cast<RtspPlayer *>(pVoid);
+    player->start_play_audio();
     return 0;
 }
 
@@ -135,8 +142,10 @@ void RtspPlayer::start() {
     LOGE("=====开启音视频解码线程==========")
     pthread_create(&pid_start, 0, startReadPacketThread, this);
     pthread_create(&pid_video_decode, 0, videoDecoderThread, this);
-    pthread_create(&pid_video_decode, 0, audioDecoderThread, this);
     pthread_create(&pid_video_play, 0, videoPlayThread, this);
+//    pthread_create(&pid_audio_decode, 0, audioDecoderThread, this);
+//    pthread_create(&pid_audio_play, 0, audioPlayThread, this);
+
 }
 
 
@@ -161,6 +170,7 @@ void RtspPlayer::start_video() {
         if (ret) {
             LOGE("avcodec_send_packet   ret %d", ret);
             // release();
+            av_packet_free(&packet);
             break;//失败了 -1094995529
         }
         av_packet_free(&packet);
@@ -212,14 +222,12 @@ void RtspPlayer::start_readPacket() {
             continue;
         }
         AVPacket *packet = av_packet_alloc();
-
         int ret = av_read_frame(formatContext, packet);
-
         if (!ret) {
             if (video_index == packet->stream_index) {
                 video_packages.push(packet);
             } else if (audio_index == packet->stream_index) {
-                // audio_packages.push(packet);
+               // audio_packages.push(packet);
             }
         } else if (ret == AVERROR_EOF) {
             // 读取完成
@@ -247,7 +255,7 @@ void RtspPlayer::start_play_video() {
                                          SWS_BILINEAR, NULL, NULL, NULL);
     uint8_t *dst_data[4];
     int dst_linesize[4];
-   // AVFrame *frame = 0;
+    // AVFrame *frame = 0;
 
     // 分配内存存储图片
     int ret = av_image_alloc(dst_data, dst_linesize, videoContext->width, videoContext->height,
@@ -307,6 +315,51 @@ void RtspPlayer::release() {
         avcodec_free_context(&audioContext);
         audioContext = nullptr;
     }
+
+}
+
+// 音频解码
+void RtspPlayer::start_decoder_audio() {
+    AVPacket *packet = nullptr;
+    while (!isPlaying) {
+        if (isStop) {
+            continue;
+        }
+        // 取出音频包
+        int ret = audio_packages.pop(packet);
+        if (!ret) {
+            continue;
+        }
+        if (!isPlaying) {
+            break;
+        }
+        // 发送到解码器
+        ret = avcodec_send_packet(audioContext, packet);
+        if (ret) {
+            av_packet_free(&packet);
+            LOGE("====音频解码失败=======");
+            break;
+        }
+        av_packet_free(&packet);
+
+        AVFrame *frame = av_frame_alloc();
+        // 将原始数据发送到frame 内存中
+        ret = avcodec_receive_frame(audioContext, frame);
+        if (ret == AVERROR(EAGAIN)) {
+            av_frame_free(&frame);
+            continue;
+        } else if (ret != 0) {
+            LOGE("avcodec_receive_frame   ret %d", ret);
+            av_frame_free(&frame);
+            break;
+        }
+        audio_frames.push(frame);
+    }
+
+}
+
+// 音频播放
+void RtspPlayer::start_play_audio() {
 
 }
 

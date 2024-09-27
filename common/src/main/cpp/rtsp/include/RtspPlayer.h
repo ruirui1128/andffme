@@ -43,7 +43,9 @@ public:
 
     void setWindow(jobject surface);
 
-    void start_audio();
+    void start_decoder_audio();
+
+    void start_play_audio();
 
     void restart();
 
@@ -58,14 +60,12 @@ private:
     char *data_source = 0;
 
 
-
     AVFormatContext *formatContext = 0;
 
     AVCodecContext *videoContext;
     AVCodecContext *audioContext;
 
     RtspNativeCallBack *callBack;
-
 
 
     bool isStop = false;
@@ -78,6 +78,7 @@ private:
     SafeQueue<AVPacket *> audio_packages; // 音频  的压缩数据包 (是编码的数据包)
 
     SafeQueue<AVFrame *> video_frames; // 视频 的原始数据包（可以直接 渲染 和 播放 的）
+    SafeQueue<AVFrame *> audio_frames; // 音频 的原始数据包（可以直接 渲染 和 播放 的）
 
     pthread_t pid_video_decode;  // 视频解码线程
     pthread_t pid_video_play;  // 视频播放线程
@@ -85,6 +86,7 @@ private:
     pthread_t pid_prepare;
 
     pthread_t pid_audio_decode;  // 音频解码线程
+    pthread_t pid_audio_play; // 音频播放
 
     ANativeWindow *nativeWindow = 0;
 

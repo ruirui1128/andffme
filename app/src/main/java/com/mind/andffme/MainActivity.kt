@@ -9,6 +9,7 @@ import com.mind.andffme.databinding.ActivityMainBinding
 import com.mind.andffme.rtmp.launchRtmpPull
 import com.mind.andffme.rtmp.launchRtmpPush
 import com.mind.andffme.rtsp.launchRtspActivity
+import com.mind.andffme.rtsp.launcherRtspMediaPull
 import com.permissionx.guolindev.PermissionX
 import java.io.File
 import java.io.FileOutputStream
@@ -68,6 +69,9 @@ class MainActivity : AppCompatActivity() {
         }
         binding.btnRtsp.setOnClickListener {
             launchRtspActivity(this)
+        }
+        binding.btnMediaRtsp.setOnClickListener {
+            launcherRtspMediaPull(this)
         }
 
     }

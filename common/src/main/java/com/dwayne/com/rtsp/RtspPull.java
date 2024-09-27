@@ -8,10 +8,6 @@ public class RtspPull {
         System.loadLibrary("rtsp"); //加载推流 so
     }
 
-
-
-
-
     public void onVideoFrame(byte[] data, int length, int width, int height) {
 
     }

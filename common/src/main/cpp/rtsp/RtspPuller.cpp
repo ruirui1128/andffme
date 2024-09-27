@@ -177,8 +177,6 @@ Java_com_dwayne_com_rtsp_RtspPull_pullVideoData(JNIEnv *env, jobject thiz) {
     }
     av_frame_free(&frame);  // 释放视频帧
 
-
-
 }
 
 extern "C"

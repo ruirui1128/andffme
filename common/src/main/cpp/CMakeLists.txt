@@ -10,6 +10,7 @@ set(player ${CMAKE_SOURCE_DIR}/player)
 
 #---rtsp---
 set(rtsp ${CMAKE_SOURCE_DIR}/rtsp)
+set(rtspm ${CMAKE_SOURCE_DIR}/rtspm)
 
 #推流器
 set(pusher ${CMAKE_SOURCE_DIR}/pusher)
@@ -52,9 +53,11 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -L${faac}/libs/${CMAKE_ANDROID_ARCH_ABI}
 file(GLOB Player_CPP ${player}/*.cpp)
 file(GLOB Push_CPP ${pusher}/*.cpp)
 file(GLOB Rtsp_CPP ${rtsp}/*.cpp)
+file(GLOB Rtspm_CPP ${rtspm}/*.cpp)
 
 #添加自己编写 cpp 源文件生成动态库
 add_library(rtsp SHARED ${Rtsp_CPP})
+add_library(rtspm SHARED ${Rtspm_CPP})
 
 #添加自己编写 cpp 源文件生成动态库
 add_library(player SHARED ${Player_CPP})
@@ -68,7 +71,34 @@ find_library(log_lib
 
 
 
+
 #播放 so
+target_link_libraries(
+        #播放 so
+        rtspm
+        # 写了此命令不用在乎添加 ffmpeg lib 顺序问题导致应用崩溃
+        -Wl,--start-group
+        avcodec avfilter avformat avutil swresample swscale
+        -Wl,--end-group
+        z
+        #拉流库
+        rtmp
+        #本地库
+        android
+        #音频播放
+        OpenSLES
+        #        utils
+        ${log_lib})
+
+
+
+
+
+
+
+
+
+#播放 rtsp so
 target_link_libraries(
         #播放 so
         rtsp
